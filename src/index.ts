@@ -448,29 +448,3 @@ export default class Iter<A> {
     return new Iter(factory)
   }
 }
-
-const perf = (label: string, fn: () => void) => {
-  const start = performance.now()
-  fn()
-  const end = performance.now()
-
-  console.log(`    ${label}:\t${end - start}ms`)
-}
-
-for (const entries of [10_000, 100_000, 1_000_000]) {
-  console.log(`[performance]\t${entries} entries`)
-
-  perf('Array', () => {
-    const arr = Array(entries)
-      .fill(0)
-      .map((x) => x * 2)
-  })
-
-  perf('Iter', () => {
-    const iter = Iter.repeat(0, entries)
-      .map((x) => x * 2)
-      .collect()
-  })
-
-  console.log()
-}

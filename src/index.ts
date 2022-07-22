@@ -137,6 +137,53 @@ export default class Iter<A> {
   }
 
   /**
+   * # Iter.enumerate
+   *
+   * Utility method to enumerate an `Iter` object.
+   *
+   * @example
+   *
+   * Iter.range(1, 10).enumerate() // Iter<[number, number]> { ... }
+   *
+   * @returns A new `Iter` containing the entries of the original `Iter`
+   */
+  enumerate() {
+    const context = this
+    const factory = function* () {
+      let i = 0
+      for (const item of context.factory()) {
+        yield [i, item] as [number, A]
+        i++
+      }
+    }
+
+    return new Iter(factory)
+  }
+
+  /**
+   * # Iter.fold
+   *
+   * Utility method to fold an `Iter` object.
+   *
+   * @example
+   *
+   * Iter.range(0, 4).fold(0, (total, item) => total + item) // number { 6 }
+   *
+   * @param initial The initial value to start folding .
+   * @param predicate A predicate function to fold the `Iter` entry.
+   * @returns A folded value from the `Iter` object.
+   */
+  fold<B>(initial: B, predicate: (acc: B, item: A) => B) {
+    let acc = initial
+
+    for (const item of this.factory()) {
+      acc = predicate(acc, item)
+    }
+
+    return acc
+  }
+
+  /**
    * # Iter.scan
    *
    * @example
@@ -400,4 +447,30 @@ export default class Iter<A> {
 
     return new Iter(factory)
   }
+}
+
+const perf = (label: string, fn: () => void) => {
+  const start = performance.now()
+  fn()
+  const end = performance.now()
+
+  console.log(`    ${label}:\t${end - start}ms`)
+}
+
+for (const entries of [10_000, 100_000, 1_000_000]) {
+  console.log(`[performance]\t${entries} entries`)
+
+  perf('Array', () => {
+    const arr = Array(entries)
+      .fill(0)
+      .map((x) => x * 2)
+  })
+
+  perf('Iter', () => {
+    const iter = Iter.repeat(0, entries)
+      .map((x) => x * 2)
+      .collect()
+  })
+
+  console.log()
 }

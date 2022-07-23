@@ -31,6 +31,23 @@ export default class Iter<A> {
   }
 
   /**
+   * # Iter.forEach
+   *
+   * Utility method to iterate over an `Iter` object.
+   *
+   * @example
+   *
+   * Iter.range(0, 4).forEach(item => console.log(item))
+   *
+   * @param callback A callback function execute over each entry of the `Iter` object.
+   */
+  forEach(callback: (item: A) => void) {
+    for (const item of this.factory()) {
+      callback(item)
+    }
+  }
+
+  /**
    * # Iter.filter
    *
    * Exposes a filtering interface to a `Iter` object.

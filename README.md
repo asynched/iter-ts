@@ -22,7 +22,7 @@ npm i iter-ts
 yarn add iter-ts
 ```
 
-> You're now ready to use iter! 🥳
+> You're now ready to use iter-ts! 🥳
 
 ## The gist
 

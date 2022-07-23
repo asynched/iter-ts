@@ -1,4 +1,4 @@
-# iter.ts
+# iter-ts
 
 Iterables with methods for JavaScript/Typescript! 🎉
 
@@ -13,13 +13,13 @@ First, you've gotta install the library with:
 - npm
 
 ```sh
-npm i iter.ts
+npm i iter-ts
 ```
 
 - yarn
 
 ```sh
-yarn add iter.ts
+yarn add iter-ts
 ```
 
 > You're now ready to use iter! 🥳
@@ -29,7 +29,7 @@ yarn add iter.ts
 Imagine you need to iterate over something, that might be an `Array` of some sorts or a `generator` function and need to do some operations on that iterable. In the case below, we'll be iterating over a Fibonacci generator function and operating over each entry.
 
 ```ts
-import Iter from 'iter.ts'
+import Iter from 'iter-ts'
 
 // This is our generator function.
 // In here, we can request as many

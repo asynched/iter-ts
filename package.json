@@ -1,11 +1,17 @@
 {
-  "name": "iter-ts",
+  "name": "@asynched/iter-ts",
   "version": "0.0.1",
   "main": "dist/index.js",
   "author": "Eder Lima",
   "license": "MIT",
+  "description": "Iterables with methods for JavaScript/Typescript! 🎉",
+  "keywords": [
+    "generators",
+    "iterators",
+    "arrays"
+  ],
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "test": "jest"
   },
   "devDependencies": {

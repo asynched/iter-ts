@@ -162,31 +162,58 @@ export default class Iter<A> {
      */
     inspect(inspector: (item: A) => void): Iter<A>;
     /**
-     * # Iter.every
+     * # Iter.all
      *
-     * Utility method to check if every entry of an `Iter` object matches a predicate.
+     * Utility method to check if all of the entries of an `Iter` object matches a predicate.
      *
      * @example
      *
-     * Iter.range(0, 5).every(x => x < 10 === 0) // true
+     * Iter.range(0, 5).all(x => x < 10 === 0) // true
      *
      * @param predicate A predicate function to filter the `Iter` entry.
-     * @returns A boolean value indicating weather every entry matches the predicate.
+     * @returns A boolean value indicating weather all entries matches the predicate.
      */
-    every(predicate: (item: A) => boolean): boolean;
+    all(predicate: (item: A) => boolean): boolean;
     /**
-     * # Iter.some
+     * # Iter.any
      *
-     * Utility method to check if some entry of an `Iter` object matches a predicate.
+     * Utility method to check if any entry of an `Iter` object matches a predicate.
      *
      * @example
      *
-     * Iter.range(0, 5).some(x => x % 2 === 0) // true
+     * Iter.range(0, 5).any(x => x % 2 === 0) // true
      *
      * @param predicate Predicate function to filter the `Iter` entry.
      * @returns A boolean value indicating if any of the entries matches the predicate.
      */
-    some(predicate: (item: A) => boolean): boolean;
+    any(predicate: (item: A) => boolean): boolean;
+    /**
+     * # Iter.reject
+     *
+     * Utility method to reject any entry that doesn't match the predicate function.
+     *
+     * @example
+     *
+     * Iter.range(0, 5).reject(x => x % 2 === 0) // Iter<number> { ... }
+     *
+     * @param predicate A predicate function to filter the `Iter` entry.
+     * @returns An `Iter` that yields the values that didn't match the predicate
+     * function.
+     */
+    reject(predicate: (item: A) => boolean): Iter<A>;
+    /**
+     * # Iter[Symbol.iterator]
+     *
+     * Utility method to iterate over an `Iter` object.
+     *
+     * @example
+     *
+     * for (const item of Iter.range(0, 5)) {
+     *  // ...
+     * }
+     *
+     * @returns A generator object that can be used to iterate over the entries of the `Iter` object.
+     */
     [Symbol.iterator](): Generator<A, any, unknown>;
     /**
      * # Iter.fromArray
@@ -212,9 +239,10 @@ export default class Iter<A> {
      *
      * @param start Start value of the range
      * @param end End value of the range
+     * @param interval Optional interval of every step in the range
      * @returns A new `Iter` object.
      */
-    static range(start: number, end: number): Iter<number>;
+    static range(start: number, end: number, interval?: number): Iter<number>;
     /**
      * # Iter.fromIterable
      *

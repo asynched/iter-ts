@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const clone = (source) => [...source];
 /**
  * # Iter
  *
@@ -135,7 +136,7 @@ class Iter {
             for (const item of context.factory()) {
                 arr.push(item);
                 if (arr.length == 2) {
-                    yield structuredClone(arr);
+                    yield clone(arr);
                     arr.splice(0, 1);
                 }
             }
@@ -273,18 +274,18 @@ class Iter {
         return new Iter(factory);
     }
     /**
-     * # Iter.every
+     * # Iter.all
      *
-     * Utility method to check if every entry of an `Iter` object matches a predicate.
+     * Utility method to check if all of the entries of an `Iter` object matches a predicate.
      *
      * @example
      *
-     * Iter.range(0, 5).every(x => x < 10 === 0) // true
+     * Iter.range(0, 5).all(x => x < 10 === 0) // true
      *
      * @param predicate A predicate function to filter the `Iter` entry.
-     * @returns A boolean value indicating weather every entry matches the predicate.
+     * @returns A boolean value indicating weather all entries matches the predicate.
      */
-    every(predicate) {
+    all(predicate) {
         for (const item of this.factory()) {
             if (!predicate(item)) {
                 return false;
@@ -293,18 +294,18 @@ class Iter {
         return true;
     }
     /**
-     * # Iter.some
+     * # Iter.any
      *
-     * Utility method to check if some entry of an `Iter` object matches a predicate.
+     * Utility method to check if any entry of an `Iter` object matches a predicate.
      *
      * @example
      *
-     * Iter.range(0, 5).some(x => x % 2 === 0) // true
+     * Iter.range(0, 5).any(x => x % 2 === 0) // true
      *
      * @param predicate Predicate function to filter the `Iter` entry.
      * @returns A boolean value indicating if any of the entries matches the predicate.
      */
-    some(predicate) {
+    any(predicate) {
         for (const item of this.factory()) {
             if (predicate(item)) {
                 return true;
@@ -312,6 +313,43 @@ class Iter {
         }
         return false;
     }
+    /**
+     * # Iter.reject
+     *
+     * Utility method to reject any entry that doesn't match the predicate function.
+     *
+     * @example
+     *
+     * Iter.range(0, 5).reject(x => x % 2 === 0) // Iter<number> { ... }
+     *
+     * @param predicate A predicate function to filter the `Iter` entry.
+     * @returns An `Iter` that yields the values that didn't match the predicate
+     * function.
+     */
+    reject(predicate) {
+        const context = this;
+        const factory = function* () {
+            for (const item of context.factory()) {
+                if (!predicate(item)) {
+                    yield item;
+                }
+            }
+        };
+        return new Iter(factory);
+    }
+    /**
+     * # Iter[Symbol.iterator]
+     *
+     * Utility method to iterate over an `Iter` object.
+     *
+     * @example
+     *
+     * for (const item of Iter.range(0, 5)) {
+     *  // ...
+     * }
+     *
+     * @returns A generator object that can be used to iterate over the entries of the `Iter` object.
+     */
     [Symbol.iterator]() {
         return this.factory();
     }
@@ -346,18 +384,19 @@ class Iter {
      *
      * @param start Start value of the range
      * @param end End value of the range
+     * @param interval Optional interval of every step in the range
      * @returns A new `Iter` object.
      */
-    static range(start, end) {
+    static range(start, end, interval = 1) {
         const factory = function* () {
             const isAsc = start < end;
             if (isAsc) {
-                for (let i = start; i < end; i++) {
+                for (let i = start; i < end; i += interval) {
                     yield i;
                 }
                 return;
             }
-            for (let i = start; i > end; i--) {
+            for (let i = start; i > end; i -= interval) {
                 yield i;
             }
         };

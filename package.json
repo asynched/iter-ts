@@ -1,5 +1,5 @@
 {
-  "name": "@asynched/iter-ts",
+  "name": "@nxrth/iter-ts",
   "version": "0.0.1",
   "main": "dist/index.js",
   "author": "Eder Lima",
